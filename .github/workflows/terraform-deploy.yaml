@@ -1,0 +1,44 @@
+name: Deploying AWS infrastructure using Terraform
+
+on: 
+  # push:
+  #   branches:
+  #     - master
+
+  workflow_dispatch:
+
+env:
+  AWS_REGION: "us-east-1"
+  TERRAFORM_VERSION: 1.9.7
+  TERRAFORM_PATH: .
+
+jobs:
+  Terraform-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Repo
+        uses: actions/checkout@v2
+
+      - name: Config AWS Creds
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1.0.3
+        with: 
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+        
+      - name: Initialize Terraform
+        working-directory: ${{ env.TERRAFORM_PATH }}
+        run: terraform init 
+
+      - name: Terraform Plan
+        working-directory: ${{ env.TERRAFORM_PATH }}
+        run: terraform plan
+
+      - name: Terraform appleboy/ssh-action
+        working-directory: ${{ env.TERRAFORM_PATH }}
+        run: terraform apply --auto-approve
