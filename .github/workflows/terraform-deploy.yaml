@@ -39,6 +39,6 @@ jobs:
         working-directory: ${{ env.TERRAFORM_PATH }}
         run: terraform plan
 
-      - name: Terraform appleboy/ssh-action
+      - name: Terraform Apply 
         working-directory: ${{ env.TERRAFORM_PATH }}
         run: terraform apply --auto-approve
