@@ -27,7 +27,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
       
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1.0.3
+        uses: hashicorp/setup-terraform@v3
         with: 
           terraform_version: ${{ env.TERRAFORM_VERSION }}
         
