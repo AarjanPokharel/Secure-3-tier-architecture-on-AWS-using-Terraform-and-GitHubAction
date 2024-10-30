@@ -18,4 +18,5 @@ resource "aws_instance" "private_ec2" {
     key_name = var.sshkey
 
     tags = merge(local.common_tags,tomap({"name" = "${local.prefix}-private-ec2"}))
+
 }

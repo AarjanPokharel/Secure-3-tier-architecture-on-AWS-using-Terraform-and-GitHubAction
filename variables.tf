@@ -30,3 +30,10 @@ variable "sshkey" {
 variable "instance_type" {
   default = "t2.micro"
 }
+
+variable "db_name" {
+  default = "secure-architecture"
+}
+
+variable "db_username" {
+}
