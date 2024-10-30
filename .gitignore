@@ -18,6 +18,6 @@ crash.log
 # Ignore plan files
 *.tfplan
 
-# Ignore any other sensitive files, such as .tfvars files that store secrets
+# Ignore any other sensitive files, such as .tfvars files that store secrets and sensitive information
 *.tfvars
 

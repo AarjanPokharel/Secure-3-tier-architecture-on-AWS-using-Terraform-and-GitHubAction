@@ -14,18 +14,27 @@ resource "aws_vpc" "main" {
 
 resource "aws_subnet" "public" {
   cidr_block = var.subnet_cidr[0]
+  map_public_ip_on_launch = true
   vpc_id = aws_vpc.main.id
   availability_zone = "${var.region}a"
 
   tags = merge(local.common_tags,tomap({"Name" = "${local.prefix}-publicSubnet"}))
 }
 
-resource "aws_subnet" "private" {
+resource "aws_subnet" "private_a" {
   cidr_block = var.subnet_cidr[1]
   vpc_id = aws_vpc.main.id
   availability_zone = "${var.region}a"
 
-  tags = merge(local.common_tags,tomap({"Name" = "${local.prefix}-privateSubnet"}))
+  tags = merge(local.common_tags,tomap({"Name" = "${local.prefix}-privateSubnetA"}))
+}
+
+resource "aws_subnet" "private_b" {
+  cidr_block = var.subnet_cidr[2]
+  vpc_id = aws_vpc.main.id
+  availability_zone = "${var.region}b"
+
+  tags = merge(local.common_tags,tomap({"Name" = "${local.prefix}-privateSubnetB"}))
 }
 
 resource "aws_internet_gateway" "igw_main" {
@@ -62,8 +71,13 @@ resource "aws_route_table_association" "public_association" {
   route_table_id = aws_route_table.public.id
 }
 
-resource "aws_route_table_association" "private_association" {
-  subnet_id = aws_subnet.private.id
+resource "aws_route_table_association" "private-a_association" {
+  subnet_id = aws_subnet.private_a.id
+  route_table_id = aws_route_table.private.id
+}
+
+resource "aws_route_table_association" "private-b_association" {
+  subnet_id = aws_subnet.private_b.id
   route_table_id = aws_route_table.private.id
 }
 
